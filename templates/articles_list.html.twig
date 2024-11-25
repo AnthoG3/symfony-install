@@ -11,9 +11,12 @@
 
 
 <main>
-
     {% for article in articles %}
-        <h1>{{ article.title }}</h1>
+            <h1>{{ article.title }}</h1>
+            <img src="{{ article.image }}" alt="Image de l'article {{ article.id }}">
+            <p>{{ article.content }}</p>
+    {% else %}
+        <p>Aucun article trouvé.</p>
     {% endfor %}
 
 
