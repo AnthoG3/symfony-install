@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class PokerController
+class PokerController extends AbstractController
 {
     #[Route('/poker', 'poker')]
     public function poker()
@@ -22,9 +22,9 @@ class PokerController
 
 
         if ($age >= 18) {
-            return new Response('Bienvenue sur ce super site de poker en ligne');
+            return $this->render('majeur.html.twig');
         } else {
-            return new Response('Vous ne pouvez pas accéder à ce site');
+            return  $this ->render ('mineur.html.twig');
         }
     }
 }
