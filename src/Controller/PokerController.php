@@ -20,8 +20,11 @@ class PokerController
         //J'utilise la propriété query qui me permet de récuperer les données GET
         $age = $request->query->get('age');
 
-        var_dump($age); die;
 
-        return new Response('Bienvenue sur ce super site de poker en ligne');
+        if ($age >= 18) {
+            return new Response('Bienvenue sur ce super site de poker en ligne');
+        } else {
+            return new Response('Vous ne pouvez pas accéder à ce site');
+        }
     }
 }
