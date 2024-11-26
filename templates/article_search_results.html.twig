@@ -1,5 +1,10 @@
-{% include "partials/_header.html.twig" %}
+{% extends "base.html.twig" %}
 
-<h1>Résultats de recherche pour "{{ search }}" :</h1>
+{% block metatitle %}
+    Résultats de recherche | Le blog de la piscine
+{% endblock metatitle %}
 
-{% include "partials/_footer.html.twig" %}
+
+{% block main %}
+    <h1>Résultats de recherche pour "{{ search }}" :</h1>
+{% endblock main %}

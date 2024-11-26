@@ -1,13 +1,17 @@
-{% include "partials/_header.html.twig" %}
+{% extends "base.html.twig" %}
+
+{% block metatitle %}
+    {{ article.title }} | Le blog de la piscine
+{% endblock metatitle %}
 
 
-<section class="articles-container">
+{% block main %}
+    <section class="articles-container">
 
-    <article class="article-container" >
-        <h2>{{ article.title }}</h2>
-    </article>
+        <article class="article-container" >
+            <h2>{{ article.title }}</h2>
+            <p>Date de création : {{ article.createdAt | date('d/m/y h:i:s') }}</p>
+        </article>
 
-</section>
-
-
-{% include "partials/_footer.html.twig" %}
+    </section>
+{% endblock main %}
