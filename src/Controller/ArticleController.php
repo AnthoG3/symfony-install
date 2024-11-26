@@ -95,7 +95,7 @@ class ArticleController extends AbstractController
                 'title' => 'Article 5',
                 'content' => 'Content of article 5',
                 'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-                'createdAt' => new \DateTime('2030-01-01 00:00:00')
+                'createdAt' => new \DateTime('2030-01-01 00:00:00'),
             ]
 
         ];
@@ -106,6 +106,10 @@ class ArticleController extends AbstractController
             if ($article['id'] === $id) {
                 $articleFound = $article;
             }
+        }
+
+        if (!$articleFound) {
+            return $this->redirectToRoute('not_found');
         }
 
         return $this->render('article_show.html.twig', [
