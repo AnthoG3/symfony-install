@@ -10,7 +10,7 @@ class ContactController extends AbstractController
 {
 
 
-    #[Route('/contact', name: 'contact', methods: ['GET', 'POST'])]
+    #[Route('/contacts', name: 'contact', methods: ['GET', 'POST'])]
     public function contact(Request $request) {
 
         $message = "Merci de remplir le formulaire";

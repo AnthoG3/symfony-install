@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+
+{% block metatitle %}
+    Categorie : {{ category.title }} | Le blog de la piscine
+{% endblock metatitle %}
+
+
+{% block main %}
+
+    <article class="article-container" style="background-color: {{ category.color }}">
+        <h2>{{ category.title }}</h2>
+    </article>
+
+{% endblock main %}

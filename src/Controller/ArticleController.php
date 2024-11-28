@@ -2,131 +2,86 @@
 
 namespace App\Controller;
 
+//Importation des classes nécessaires
+use App\Entity\Article;
+use App\Repository\ArticleRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+//Création de la classe controller "ArticleController" qui utilise "AbstractController"
 class ArticleController extends AbstractController
 {
-
+    //Route qui sert à afficher la liste des articles
     #[Route('/articles', 'articles_list')]
-    public function articles(): Response
+    public function articles(ArticleRepository $articleRepository): Response
     {
 
-        $articles = [
-            [
-                'id' => 1,
-                'title' => 'Article 1',
-                'content' => 'Content of article 1',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-                'color' => 'blue',
-            ],
-            [
-                'id' => 2,
-                'title' => 'Article 2',
-                'content' => 'Content of article 2',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-                'color' => 'yellow',
-            ],
-            [
-                'id' => 3,
-                'title' => 'Article 3',
-                'content' => 'Content of article 3',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-            ],
-            [
-                'id' => 4,
-                'title' => 'Article 4',
-                'content' => 'Content of article 4',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-            ],
-            [
-                'id' => 5,
-                'title' => 'Article 5',
-                'content' => 'Content of article 5',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-            ]
+        //Ici on récupére tous les articles
+        $articles = $articleRepository->findAll();
 
-        ];
-
-
+        //Renvoi la liste des articles
         return $this->render('articles_list.html.twig', [
             'articles' => $articles
         ]);
 
     }
 
+    //On crée une route qui affichera un article en particulier
     #[Route('/article/{id}', 'article_show', ['id' => '\d+'])]
-    public function showArticle(int $id): Response
+    public function showArticle(int $id, ArticleRepository $articleRepository): Response
     {
+        //On cherche l'article par son ID
+        $articleFound = $articleRepository->find($id);
 
-        $articles = [
-            [
-                'id' => 1,
-                'title' => 'Article 1',
-                'content' => 'Content of article 1',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-                'createdAt' => new \DateTime('2030-01-01 00:00:00')
-            ],
-            [
-                'id' => 2,
-                'title' => 'Article 2',
-                'content' => 'Content of article 2',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-                'createdAt' => new \DateTime('2030-01-01 00:00:00')
-            ],
-            [
-                'id' => 3,
-                'title' => 'Article 3',
-                'content' => 'Content of article 3',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-                'createdAt' => new \DateTime('2030-01-01 00:00:00')
-            ],
-            [
-                'id' => 4,
-                'title' => 'Article 4',
-                'content' => 'Content of article 4',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-                'createdAt' => new \DateTime('2030-01-01 00:00:00')
-            ],
-            [
-                'id' => 5,
-                'title' => 'Article 5',
-                'content' => 'Content of article 5',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-                'createdAt' => new \DateTime('2030-01-01 00:00:00'),
-            ]
-
-        ];
-
-        $articleFound = null;
-
-        foreach ($articles as $article) {
-            if ($article['id'] === $id) {
-                $articleFound = $article;
-            }
-        }
-
+        //Redirige vers une page "not found" si l'article demandé n'existe pas
         if (!$articleFound) {
             return $this->redirectToRoute('not_found');
         }
-
+    //Renvoi l'article qui a ete trouvé
         return $this->render('article_show.html.twig', [
             'article' => $articleFound
         ]);
 
     }
 
-
+//Cette route affichera le resultat de la recherche d'article
     #[Route('/articles/search-results', 'article_search_results')]
     public function articleSearchResults(Request $request): Response {
+
+        //Récupere le resultat de la recherche
         $search = $request->query->get('search');
 
+//Renvoi le resultat de la recherche
         return $this->render('article_search_results.html.twig', [
             'search' => $search
         ]);
 
+    }
+
+//Cette route sert à créer un nouvel article
+    #[Route('/article/create', 'create_article')]
+    public function createArticle(EntityManagerInterface $entityManager): Response {
+
+//On crée une nouvelle instance de la class article
+        $article = new Article();
+
+        //On définit les propriétées de l'article
+        $article->setTitle('Article 5');
+        $article->setContent('Contenu article 5');
+        $article->setImage("https://cdn.futura-sciences.com/sources/images/AI-creation.jpg");
+        $article->setCreatedAt(new \DateTime());
+
+//Persist "prépare" l'entité à se lier à la base (LA JE SUIS PAS CERTAIN DE MON TRUC)
+        $entityManager->persist($article);
+
+//On exécute les requetes SQL pour sauvegarder l'entité
+        $entityManager->flush();
+
+
+        return new Response('OK'); //Retourne une reponse
     }
 
 }
