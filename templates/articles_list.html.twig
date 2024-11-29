@@ -14,8 +14,12 @@
                 {% for article in articles %}
                         <article class="article-container" >
                                 <h2>{{ article.title }}</h2>
-                                <p>{{ article.content }}</p>
-                                <a href="{{ path('article_show', {id: article.id}) }}">Voir l'article</a>
+                                <ul>
+                                        <li><a href="{{ path('article_show', {id: article.id}) }}">Voir l'article</a></li>
+                                        <li><a href="{{ path('delete_article', {id: article.id}) }}">Supprimer l'article</a></li>
+                                </ul>
+
+
                         </article>
                 {% endfor %}
 

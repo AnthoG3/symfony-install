@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+
+{% block metatitle %}
+    Article mis à jour | Le blog de La Piscine
+{% endblock %}
+
+{% block main %}
+
+    <p>{{ message }}</p>
+
+    <form method="post" action="{{ path('update_article', {id: article.id}) }}">
+
+        <label>Titre
+            <input name="title" type="text" value="{{ article.title }}" required/>
+        </label>
+
+        <label>Contenu
+            <textarea name="content" required>{{ article.content }}</textarea>
+        </label>
+
+        <label>Image
+            <input name="image" type="text" value="{{ article.image }}"/>
+        </label>
+
+        <input type="submit">
+
+
+    </form>
+
+{% endblock %}

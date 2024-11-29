@@ -17,11 +17,11 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createAt = null;
+    private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
@@ -29,13 +29,6 @@ class Article
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(?string $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getTitle(): ?string
@@ -62,14 +55,14 @@ class Article
         return $this;
     }
 
-    public function getCreateAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->createAt;
+        return $this->createdAt;
     }
 
-    public function setCreateAt(\DateTimeInterface $createAt): static
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
-        $this->createAt = $createAt;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -79,10 +72,11 @@ class Article
         return $this->image;
     }
 
-    public function setImage(string $image): static
+    public function setImage(?string $image): void
     {
         $this->image = $image;
-
-        return $this;
     }
+
+
+
 }

@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Form\ArticleType;
 
 //Création de la classe controller "ArticleController" qui utilise "AbstractController"
 class ArticleController extends AbstractController
@@ -40,7 +41,7 @@ class ArticleController extends AbstractController
         if (!$articleFound) {
             return $this->redirectToRoute('not_found');
         }
-    //Renvoi l'article qui a ete trouvé
+        //Renvoi l'article qui a ete trouvé
         return $this->render('article_show.html.twig', [
             'article' => $articleFound
         ]);
@@ -49,7 +50,8 @@ class ArticleController extends AbstractController
 
 //Cette route affichera le resultat de la recherche d'article
     #[Route('/articles/search-results', 'article_search_results')]
-    public function articleSearchResults(Request $request): Response {
+    public function articleSearchResults(Request $request): Response
+    {
 
         //Récupere le resultat de la recherche
         $search = $request->query->get('search');
@@ -63,25 +65,86 @@ class ArticleController extends AbstractController
 
 //Cette route sert à créer un nouvel article
     #[Route('/article/create', 'create_article')]
-    public function createArticle(EntityManagerInterface $entityManager): Response {
-
-//On crée une nouvelle instance de la class article
+    public function createArticle(EntityManagerInterface $entityManager, Request $request): Response
+    {
+        //On crée une nouvelle instance de la class article
         $article = new Article();
 
-        //On définit les propriétées de l'article
-        $article->setTitle('Article 5');
-        $article->setContent('Contenu article 5');
-        $article->setImage("https://cdn.futura-sciences.com/sources/images/AI-creation.jpg");
-        $article->setCreatedAt(new \DateTime());
+        // Création du formulaire
+        $form = $this->createForm(ArticleType::class, $article);
 
-//Persist "prépare" l'entité à se lier à la base (LA JE SUIS PAS CERTAIN DE MON TRUC)
-        $entityManager->persist($article);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // On définit la date de création
+            $article->setCreatedAt(new \DateTime());
 
-//On exécute les requetes SQL pour sauvegarder l'entité
+            // Persist enregistre comme "git commit"
+            $entityManager->persist($article);
+
+            // On exécute les requetes SQL pour sauvegarder l'entité "agit comme git push"
+            $entityManager->flush();
+
+            $formView = $form->createView();
+        }
+
+        return $this->render('article_create.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+    //On crée une route qui permet de supprimer un article
+    #[Route('/article/delete/{id}', 'delete_article',  ['id' => '\d+'])]
+    public function removeArticle(int $id, EntityManagerInterface $entityManager, ArticleRepository $articleRepository): Response {
+//On recherche l'article par son ID
+        $article = $articleRepository->find($id);
+//Si l'article n'existe pas en renvoi ver sune page indiquant "not found"
+        if (!$article) {
+            return $this->redirectToRoute('not_found');
+        }
+//On supprime l'article de la base de donnée
+        $entityManager->remove($article);
         $entityManager->flush();
+//On renvoie la confirmation de suppression
+        return $this->render('article_delete.html.twig', [
+            'article' => $article
+        ]);
+    }
+//On crée la route qui met a jour un article
+    #[Route('/article/update/{id}', 'update_article',  ['id' => '\d+'])]
+    public function updateArticle(int $id, ArticleRepository $articleRepository, EntityManagerInterface $entityManager, Request $request)
+    {
+        // je récupère en BDD l'article lié à l'id de l'url
+        // Doctrine (ORM) me créé une instance de l'entité Article
+        // et la remplie avec les données de l'article en BDD
+        $article = $articleRepository->find($id);
+
+        $message = "Veuillez remplir les champs";
 
 
-        return new Response('OK'); //Retourne une reponse
+        //On crée une boucle qui dit que si c'est une requête POST
+        if ($request->isMethod('POST')) {
+
+            // On récupère la valeur des champs et si ils n'ont pas été modifiés, on récupére la valeur de base qui était dans la BDD
+            $title = $request->request->get('title');
+            $content = $request->request->get('content');
+            $image = $request->request->get('image');
+
+            // On modifie les valeurs de l'entité avec celles des champs
+            $article->setTitle($title);
+            $article->setContent($content);
+            $article->setImage($image);
+
+            // On mets à jour l'article en BDD
+            $entityManager->persist($article);
+            $entityManager->flush();
+
+            $message = "L'article '" . $article->getTitle() . "' a bien été mis à jour";
+        }
+
+        // On envoie au formulaire twig l'article qui existe en BDD et qui va pré-remplir les champs
+        return $this->render('article_update.html.twig', [
+            'article' => $article,
+            'message' => $message
+        ]);
     }
 
 }
