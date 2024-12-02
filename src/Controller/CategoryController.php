@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Category;
-use App\Repository\ArticleRepository;
+use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,43 +29,33 @@ class CategoryController extends AbstractController
     public function showCategory(int $id, CategoryRepository $categoryRepository): Response
     {
         $category = $categoryRepository->find($id);
+        $articles = $category->getArticles();
 
         return $this->render('category_show.html.twig', [
-            'category' => $category
+            'category' => $category,
+            'articles' => $articles,
         ]);
     }
 
 
-    #[Route('/category/create', 'create_category')]
-    public function createCategory(EntityManagerInterface $entityManager) {
+    #[Route('/category/create', 'create_category', [], ['GET', 'POST'])]
+    public function createCategory(EntityManagerInterface $entityManager, Request $request) {
+
         $category = new Category();
-        $category->setTitle('International');
 
-        $category->setColor('red');
+        $formCategory = $this->createForm(CategoryType::class, $category);
 
-        $entityManager->persist($category);
-        $entityManager->flush();
+        $formCategory->handleRequest($request);
+
+        if ($formCategory->isSubmitted()) {
+            $entityManager->persist($category);
+            $entityManager->flush();
+        }
+
+        $formCategoryView = $formCategory->createView();
 
         return $this->render('category_create.html.twig', [
-            'category' => $category
-        ]);
-
-    }
-    //Cette route affichera le resultat de la recherche d'article
-    #[Route('/article/search-results', 'article_search_results')]
-    public function articleSearchResults(Request $request,ArticleRepository $articleRepository): Response
-    {
-
-        //Récupere le resultat de la recherche
-        $search = $request->query->get('search');
-
-        $category = $articleRepository->search($search);
-
-//Renvoi le resultat de la recherche
-        return $this->render('article_search_results.html.twig', [
-            'search' => $search,
-            'category' => $category,
-            'article' => null
+            'formCategoryView' => $formCategoryView
         ]);
 
     }
@@ -83,6 +73,28 @@ class CategoryController extends AbstractController
             'category' => $category
         ]);
 
+
+    }
+
+    #[Route('/category/update/{id}', 'update_category', ['id' => '\d+'], ['GET', 'POST'])]
+    public function updateCategory(int $id, EntityManagerInterface $entityManager, Request $request, CategoryRepository $categoryRepository) {
+
+        $category = $categoryRepository->find($id);
+
+        $formCategory = $this->createForm(CategoryType::class, $category);
+
+        $formCategory->handleRequest($request);
+
+        if ($formCategory->isSubmitted()) {
+            $entityManager->persist($category);
+            $entityManager->flush();
+        }
+
+        $formCategoryView = $formCategory->createView();
+
+        return $this->render('category_update.html.twig', [
+            'formCategoryView' => $formCategoryView
+        ]);
 
     }
 

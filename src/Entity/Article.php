@@ -35,6 +35,10 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Category $category = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,10 +125,17 @@ class Article
 
         return $this;
     }
-    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'articles')]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Category $category = null;
 
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
 
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
+
+        return $this;
+    }
 
 }

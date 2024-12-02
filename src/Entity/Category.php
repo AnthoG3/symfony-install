@@ -3,8 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
@@ -50,5 +50,10 @@ class Category
         $this->color = $color;
 
         return $this;
+    }
+
+    public function getArticles(): Collection
+    {
+        return $this->articles;
     }
 }

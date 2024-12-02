@@ -1,32 +1,16 @@
 {% extends "base.html.twig" %}
 
 {% block metatitle %}
-    Categorie créée | Le blog de la piscine
+    Création d'une catégorie | Le blog de la piscine
 {% endblock metatitle %}
-{% extends "base.html.twig" %}
-
-{% block metatitle %}
-    Categorie créée | Le blog de la piscine
-{% endblock metatitle %}
-
 
 {% block main %}
-
-    <p>{{ message }}</p>
-
-    <form method="post" action="{{ path('create_category') }}">
-
-        <label>Titre
-            <input name="title" type="text" required/>
-        </label>
-
-        <label>Couleur
-            <input type="color" name="color">
-        </label>
-
-        <input type="submit">
-
-    </form>
-
-
+    <section class="container my-5">
+        <h1 class="mb-4">Créer une catégorie</h1>
+        <div class="card shadow-sm p-4">
+            {{ form_start(formCategoryView, {'attr': {'class': 'needs-validation'}}) }}
+            {{ form_widget(formCategoryView, {'attr': {'class': 'form-control'}}) }}
+            {{ form_end(formCategoryView) }}
+        </div>
+    </section>
 {% endblock main %}

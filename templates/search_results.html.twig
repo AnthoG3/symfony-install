@@ -1,0 +1,72 @@
+{% extends "base.html.twig" %}
+
+{% block metatitle %}
+    Résultats de recherche | Le blog de la piscine
+{% endblock metatitle %}
+
+{% block main %}
+    <section class="container my-5">
+        <h1 class="mb-4">Résultats de recherche pour "{{ search }}" :</h1>
+
+        <!-- Catégories -->
+        <h2 class="mb-3">Catégories ({{ categories | length }})</h2>
+        <div class="row">
+            {% if categories is empty and articles is empty %}
+                <p class="text-center text-muted">Aucune catégorie ne correspond à votre recherche.</p>
+            {% else %}
+                {% for category in categories %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card shadow-sm h-100" style="background-color: {{ category.color }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ category.title }}</h5>
+                                <ul class="list-unstyled mt-3">
+                                    <li>
+                                        <a class="btn btn-primary btn-sm" href="{{ path('show_category', {id: category.id}) }}">
+                                            Voir la catégorie
+                                        </a>
+                                    </li>
+                                    <li class="mt-2">
+                                        <a class="btn btn-danger btn-sm" href="{{ path('delete_category', {id: category.id}) }}">
+                                            Supprimer la catégorie
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Articles -->
+        <h2 class="mt-5 mb-3">Articles ({{ articles | length }})</h2>
+        <div class="row">
+            {% if categories is empty and articles is empty %}
+                <p class="text-center text-muted">Aucun article ne correspond à votre recherche.</p>
+            {% else %}
+                {% for article in articles %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ article.title }}</h5>
+                                <p class="card-text">{{ article.content|slice(0, 100) ~ '...' }}</p>
+                                <ul class="list-unstyled mt-3">
+                                    <li>
+                                        <a class="btn btn-primary btn-sm" href="{{ path('article_show', {id: article.id}) }}">
+                                            Voir l'article
+                                        </a>
+                                    </li>
+                                    <li class="mt-2">
+                                        <a class="btn btn-danger btn-sm" href="{{ path('delete_article', {id: article.id}) }}">
+                                            Supprimer l'article
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </section>
+{% endblock main %}

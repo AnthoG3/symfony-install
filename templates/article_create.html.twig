@@ -5,7 +5,19 @@
 {% endblock %}
 
 {% block main %}
+    <section class="container my-5">
+        <h1 class="mb-4">Créer un nouvel article</h1>
 
-    {{ form(formView) }}
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm p-4">
+                    {{ form_start(formView, {'attr': {'class': 'needs-validation'}}) }}
 
+                    {{ form_widget(formView, {'attr': {'class': 'form-control'}}) }}
+
+                    {{ form_end(formView) }}
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
