@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -46,6 +48,24 @@ class CategoryController extends AbstractController
 
         return $this->render('category_create.html.twig', [
             'category' => $category
+        ]);
+
+    }
+    //Cette route affichera le resultat de la recherche d'article
+    #[Route('/article/search-results', 'article_search_results')]
+    public function articleSearchResults(Request $request,ArticleRepository $articleRepository): Response
+    {
+
+        //Récupere le resultat de la recherche
+        $search = $request->query->get('search');
+
+        $category = $articleRepository->search($search);
+
+//Renvoi le resultat de la recherche
+        return $this->render('article_search_results.html.twig', [
+            'search' => $search,
+            'category' => $category,
+            'article' => null
         ]);
 
     }

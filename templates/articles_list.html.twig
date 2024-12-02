@@ -7,11 +7,14 @@
 
 {% block main %}
 
+        <h3>Il y a {{ articles | length }} articles actuellement</h3>
+
         <section class="articles-container">
 
-                <h3>Il y a {{ articles | length }} articles actuellement</h3>
+
 
                 {% for article in articles %}
+
                         <article class="article-container" >
                                 <h2>{{ article.title }}</h2>
                                 <ul>

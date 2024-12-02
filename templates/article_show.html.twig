@@ -8,9 +8,15 @@
 {% block main %}
     <section class="articles-container">
 
+
+
+
+
         <article class="article-container" >
             <h2>{{ article.title }}</h2>
+            <p>{{ article.content }}</p>
             <p>Date de création : {{ article.createdAt | date('d/m/y h:i:s') }}</p>
+            <li><a href="{{ 'update_article' }}">Modifier l'article</a></li>
         </article>
 
     </section>

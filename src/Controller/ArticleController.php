@@ -43,52 +43,63 @@ class ArticleController extends AbstractController
         }
         //Renvoi l'article qui a ete trouvé
         return $this->render('article_show.html.twig', [
-            'article' => $articleFound
+            'article' => $articleFound,
+            'edit_url' => $this->generateUrl('update_article', ['id' => $articleFound->getId()])
         ]);
 
     }
 
 //Cette route affichera le resultat de la recherche d'article
     #[Route('/articles/search-results', 'article_search_results')]
-    public function articleSearchResults(Request $request): Response
+    public function articleSearchResults(Request $request,ArticleRepository $articleRepository): Response
     {
 
         //Récupere le resultat de la recherche
         $search = $request->query->get('search');
 
+        $articles = $articleRepository->search($search);
+
 //Renvoi le resultat de la recherche
         return $this->render('article_search_results.html.twig', [
-            'search' => $search
+            'search' => $search,
+            'article' => $articles,
+            'category' => null
         ]);
 
     }
 
+
+
 //Cette route sert à créer un nouvel article
     #[Route('/article/create', 'create_article')]
-    public function createArticle(EntityManagerInterface $entityManager, Request $request): Response
-    {
-        //On crée une nouvelle instance de la class article
+    public function createArticle(EntityManagerInterface $entityManager, Request $request): Response {
+
         $article = new Article();
 
-        // Création du formulaire
         $form = $this->createForm(ArticleType::class, $article);
 
+        // je demande au formulaire de symfony
+        // de récupérer les données de la requête
+        // et de remplir automatiquement l'entité $article avec
+        // donc de récupérer les données de chaque input
+        // et de les stocker dans les propriétés de l'entité (setTitle() etc)
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // On définit la date de création
+
+        // je vérifie que les données ont été envoyées
+        if ($form->isSubmitted()) {
+            // je mets automatiquement la date de création de mon article
+            // car je ne veux pas que ce soit choisi par l'utilisateur
             $article->setCreatedAt(new \DateTime());
 
-            // Persist enregistre comme "git commit"
+            // j'enregistre l'entité article dans ma bdd
             $entityManager->persist($article);
-
-            // On exécute les requetes SQL pour sauvegarder l'entité "agit comme git push"
             $entityManager->flush();
-
-            $formView = $form->createView();
         }
 
+        $formView = $form->createView();
+
         return $this->render('article_create.html.twig', [
-            'form' => $form->createView()
+            'formView' => $formView
         ]);
     }
     //On crée une route qui permet de supprimer un article

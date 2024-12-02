@@ -6,10 +6,11 @@
 
 
 {% block main %}
+    <h3>Il y a {{ categories | length }} categories actuellement</h3>
 
     <section class="articles-container">
 
-        <h3>Il y a {{ categories | length }} categories actuellement</h3>
+
 
         {% for category in categories %}
             <article class="article-container" style="background-color: {{ category.color }}">
@@ -17,6 +18,7 @@
                 <ul>
                     <li><a href="{{ path('show_category', {id: category.id}) }}">Voir la catégorie</a></li>
                     <li><a href="{{ path('delete_category', {id: category.id}) }}">Supprimer la catégorie</a></li>
+
                 </ul>
             </article>
         {% endfor %}

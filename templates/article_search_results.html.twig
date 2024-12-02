@@ -7,4 +7,26 @@
 
 {% block main %}
     <h1>Résultats de recherche pour "{{ search }}" :</h1>
+
+    {% for article in article %}
+
+    <div class="article-container">
+        <h4>{{ article.title }}</h4>
+    <h4>{{ article.content }}</h4>
+    <div class="image-search"><img src="https://www.dynamique-entreprendre.com/wp-content/uploads/2018/06/2000px-corporate-woman-giving-a-powerpoint-presentation-svg-.png" alt="image">{{ article.image }}</div>
+    </div>
+
+    {% endfor %}
+
+    {% for category in category %}
+
+        <div class="article-container">
+            <h4>{{ category.title }}</h4>
+            <h4>{{ category.content }}</h4>
+
+        </div>
+
+    {% endfor %}
+
 {% endblock main %}
+

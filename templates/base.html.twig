@@ -14,9 +14,10 @@
 
     <nav>
         <ul>
-            <li><a href="{{ path('home') }}">Accueil</a></li>
-            <li><a href="{{ path('articles_list') }}">Articles</a></li>
-            <li><a href="{{ path('list_categories') }}">Categories</a></li>
+            <li class="first"><a href="{{ path('home') }}">Accueil</a></li>
+            <li class="first"><a href="{{ path('articles_list') }}">Articles</a></li>
+            <li class="first"><a href="{{ path('list_categories') }}">Categories</a></li>
+            <li class="first"><a href="{{ path('create_article') }}">Créer un article</a></li>
         </ul>
 
         <form method="get" action="{{ path('article_search_results') }}">

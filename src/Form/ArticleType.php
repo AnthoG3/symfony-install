@@ -16,7 +16,6 @@ class ArticleType extends AbstractType
             ->add('title')
             ->add('content')
             ->add('image')
-            ->add('description')
             ->add('author')
             ->add('status')
             ->add('enregistrer', SubmitType::class)
