@@ -10,14 +10,7 @@
 
 .article-container {
     width: 33.33%;
+    background-color: lightgray;
     text-align: center;
-    border: 1px solid black;
+    border: 1px solid gray;
 }
-
-.first{
-    display: flex;
-    flex-direction: row;
-    text-decoration: none;
-
-}
-

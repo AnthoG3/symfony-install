@@ -11,17 +11,17 @@
         <div class="row">
             {% for category in categories %}
                 <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card shadow-sm h-100" style="background-color: {{ category.color }}">
+                    <div class="card shadow-sm h-100" style="background-color:rgba(224,218,198,0.47) ">
                         <div class="card-body">
                             <h5 class="card-title">{{ category.title }}</h5>
                             <ul class="list-unstyled mt-3">
                                 <li>
-                                    <a class="btn btn-primary btn-sm" href="{{ path('show_category', {id: category.id}) }}">
+                                    <a class="btn btn-success btn-sm" href="{{ path('show_category', {id: category.id}) }}">
                                         Voir la catégorie
                                     </a>
                                 </li>
                                 <li class="mt-2">
-                                    <a class="btn btn-danger btn-sm" href="{{ path('delete_category', {id: category.id}) }}">
+                                    <a class="btn btn-warning btn-sm" href="{{ path('delete_category', {id: category.id}) }}">
                                         Supprimer la catégorie
                                     </a>
                                 </li>

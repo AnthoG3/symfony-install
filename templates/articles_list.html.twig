@@ -4,27 +4,32 @@
         Liste des articles | Le blog de la piscine
 {% endblock metatitle %}
 
-
 {% block main %}
+        <section class="container my-5">
+                <h3 class="mb-4">Il y a {{ articles | length }} articles actuellement</h3>
 
-        <h3>Il y a {{ articles | length }} articles actuellement</h3>
-
-        <section class="articles-container">
-
-
-
-                {% for article in articles %}
-
-                        <article class="article-container" >
-                                <h2>{{ article.title }}</h2>
-                                <ul>
-                                        <li><a href="{{ path('article_show', {id: article.id}) }}">Voir l'article</a></li>
-                                        <li><a href="{{ path('delete_article', {id: article.id}) }}">Supprimer l'article</a></li>
-                                </ul>
-
-
-                        </article>
-                {% endfor %}
-
+                <div class="row">
+                        {% for article in articles %}
+                                <div class="col-md-6 col-lg-4 mb-4">
+                                        <div class="card shadow-sm h-100" style="background-color: rgba(224,218,198,0.47)">
+                                                <div class="card-body">
+                                                        <h5 class="card-title">{{ article.title }}</h5>
+                                                        <ul class="list-unstyled mt-3">
+                                                                <li>
+                                                                        <a class="btn btn-success btn-sm" href="{{ path('article_show', {id: article.id}) }}">
+                                                                                Voir l'article
+                                                                        </a>
+                                                                </li>
+                                                                <li class="mt-2">
+                                                                        <a class="btn btn-warning btn-sm" href="{{ path('delete_article', {id: article.id}) }}">
+                                                                                Supprimer l'article
+                                                                        </a>
+                                                                </li>
+                                                        </ul>
+                                                </div>
+                                        </div>
+                                </div>
+                        {% endfor %}
+                </div>
         </section>
 {% endblock main %}

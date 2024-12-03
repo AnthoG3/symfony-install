@@ -20,6 +20,11 @@ class CategoryType extends AbstractType
                 'label' => 'Titre de la catégorie',
                 'label_attr' => ['class' => 'form-label'],
             ])
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'title',
+                'placeholder' => 'Choisissez la categorie',
+            ])
             ->add('color', ColorType::class, [
                 'attr' => ['class' => 'form-control form-control-color'],
                 'label' => 'Couleur',
@@ -28,12 +33,7 @@ class CategoryType extends AbstractType
             ->add('enregistrer', SubmitType::class, [
                 'attr' => ['class' => 'btn btn-success mt-3'],
                 'label' => 'Enregistrer',
-            ])
-        ->add('category', EntityType::class, [
-            'class' => Category::class,
-            'choice_label' => 'title',
-            'placeholder' => 'Choisissez la categorie',
-        ]);
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
